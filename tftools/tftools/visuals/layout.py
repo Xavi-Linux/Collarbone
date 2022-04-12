@@ -7,8 +7,8 @@ from matplotlib.image import AxesImage
 from matplotlib.lines import Line2D
 from matplotlib.text import  Text
 
-from tensorflow.python.keras.layers import Layer, Dense, Conv2D
-from tensorflow.python.keras.models import Model
+from tensorflow.keras.layers import Layer, Dense, Conv2D
+from tensorflow.keras.models import Model
 
 from typing import Union, List, Tuple, Dict
 
@@ -235,5 +235,5 @@ if __name__ == '__main__':
     res = l(np.arange(75.).reshape((1, 5, 5, 3)))
     l1: Dense = Dense(3, input_shape=(5, 5), use_bias=True)
     res1 = l1(np.arange(25.).reshape((5,5)))
-    f = plot_weights([l, l1], epochs=100, colour_scope='layer_wide')
+    f = plot_weights(l, epochs=100, colour_scope='layer_wide')
     f.savefig('fig')
