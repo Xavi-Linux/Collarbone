@@ -8,9 +8,9 @@ setup(name='tftools',
       author='xavi-linux',
       author_email='xavi.ms@xavims.net',
       keywords='tftools',
-      packages=find_packages(include=['tftools']),
+      packages=find_packages(['tftools', 'visuals']),
       python_requires='>=3.6, <4',
       install_requires=['tensorflow>=2.7.0',
-                'matplotlib>=3.2.2',
-                'numpy>=1.19.5']
+                        'matplotlib>=3.2.2',
+                        'numpy>=1.19.5']
      )
