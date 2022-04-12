@@ -52,9 +52,15 @@ def get_layers(target: Union[Layer, List[Layer], Model]) -> List[Layer]:
 
     elif isinstance(target, Model):
 
-        return target.layers
+        return list(filter(lambda l: len(l.get_weights()) > 0,
+                           target.layers
+                           )
+                    )
 
-    return target
+    return list(filter(lambda l: len(l.get_weights()) > 0,
+                       target
+                       )
+                )
 
 
 def get_horizontal_alignment(text: str) -> float:
