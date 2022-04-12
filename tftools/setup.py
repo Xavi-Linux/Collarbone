@@ -1,4 +1,4 @@
-from setuptools import find_packages, setup
+from setuptools import find_namespace_packages, setup
 
 setup(name='tftools',
       version='0.0.1',
@@ -8,7 +8,7 @@ setup(name='tftools',
       author='xavi-linux',
       author_email='xavi.ms@xavims.net',
       keywords='tftools',
-      packages=['tftools', 'tftools.visuals'],
+      packages=find_namespace_packages(include=['tftools.*']),
       python_requires='>=3.6, <4',
       install_requires=['tensorflow>=2.7.0',
                         'matplotlib>=3.2.2',
