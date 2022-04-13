@@ -46,16 +46,17 @@ def get_layers(target: Union[Layer, List[Layer], Model]) -> List[Layer]:
     """
     model case is yet to be deployed
     """
-    if isinstance(target, Layer):
 
-        return [target]
-
-    elif isinstance(target, Model):
+    if isinstance(target, Model):
 
         return list(filter(lambda l: len(l.get_weights()) > 0,
                            target.layers
                            )
                     )
+
+    elif isinstance(target, Layer):
+
+        return [target]
 
     return list(filter(lambda l: len(l.get_weights()) > 0,
                        target
