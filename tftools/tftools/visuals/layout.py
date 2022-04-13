@@ -5,9 +5,9 @@ from matplotlib.patches import Rectangle
 from matplotlib.colors import Normalize
 from matplotlib.image import AxesImage
 from matplotlib.lines import Line2D
-from matplotlib.text import  Text
+from matplotlib.text import Text
 
-from tensorflow.keras.layers import Layer, Dense, Conv2D
+from tensorflow.keras.layers import Layer
 from tensorflow.keras.models import Model, Sequential
 
 from typing import Union, List, Tuple, Dict
@@ -242,9 +242,16 @@ def plot_weights(target: Union[Layer, List[Layer], Model],
 
     for i, layer in enumerate(layers):
         i: int
-        layer: Layer
+        layer: Union[Layer, np.ndarray]
+        name: str
+        if hasattr(layer, 'name'):
+            name = layer.name
 
-        fig: Figure = build_subheader(fig, subgrid[i * 2, 0], 'Layer {0}'.format(layer.name))
+        else:
+
+            name = str(i)
+
+        fig: Figure = build_subheader(fig, subgrid[i * 2, 0], 'Layer {0}'.format(name))
 
         fig: Figure = plot_layer(layer, fig, subgrid[i * 2 + 1, 0], minmax=scope)
 
@@ -253,11 +260,4 @@ def plot_weights(target: Union[Layer, List[Layer], Model],
     return fig
 
 
-if __name__ == '__main__':
 
-    l: Conv2D = Conv2D(10, input_shape=(1, 5, 5, 3), use_bias=True, kernel_size=(5, 5), padding='same')
-    res = l(np.arange(75.).reshape((1, 5, 5, 3)))
-    l1: Dense = Dense(3, input_shape=(5, 5), use_bias=True)
-    res1 = l1(np.arange(25.).reshape((5,5)))
-    f = plot_weights([l1, l, l1, l,l, l1] , epochs=100, colour_scope='layer_wide')
-    f.savefig('fig')
