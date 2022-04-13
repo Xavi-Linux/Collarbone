@@ -8,7 +8,7 @@ from matplotlib.lines import Line2D
 from matplotlib.text import  Text
 
 from tensorflow.keras.layers import Layer, Dense, Conv2D
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import Model, Sequential
 
 from typing import Union, List, Tuple, Dict
 
@@ -42,17 +42,24 @@ def calculate_matrix_index(index:int, ncols:int) -> Tuple[int, int]:
     return nrow, ncol
 
 
-def get_layers(target: Union[Layer, List[Layer], Model]) -> List[Layer]:
+def get_layers(target: Union[Layer, List[Layer], Model]) -> Union[List[Layer], List[np.ndarray]]:
     """
     model case is yet to be deployed
     """
 
     if isinstance(target, Model):
+        if isinstance(target, Sequential):
 
-        return list(filter(lambda l: len(l.get_weights()) > 0,
-                           target.layers
-                           )
-                    )
+            return list(filter(lambda l: len(l.get_weights()) > 0,
+                               target.layers
+                               )
+                        )
+
+        else:
+
+            extracted_weights: List[np.ndarray] = target.get_weights()
+
+            return list(filter(lambda w: w.ndim > 1, extracted_weights))
 
     elif isinstance(target, Layer):
 
@@ -127,11 +134,17 @@ def build_subheader(layout: Figure, position: SubplotSpec, title: str) -> Figure
     return layout
 
 
-def plot_layer(layer: Layer, layout: Figure,
+def plot_layer(layer: Union[Layer, np.ndarray], layout: Figure,
                position: SubplotSpec,
                minmax: Union[None, Tuple[float, float]]=None) -> Figure:
 
-    weights: np.ndarray = layer.get_weights()[0]
+    weights: np.ndarray
+    if isinstance(Layer, layer):
+        weights = layer.get_weights()[0]
+
+    else:
+        weights = layer
+
     if weights.ndim == 2:
         weights: np.ndarray = np.expand_dims(weights, (-2, -1))
 
@@ -202,7 +215,7 @@ def plot_weights(target: Union[Layer, List[Layer], Model],
     """
     title: str = 'Weights after {0} epochs'.format(epochs) if epochs else 'Weights'
 
-    layers: List[Layer] = get_layers(target)
+    layers: Union[List[Layer], List[np.ndarray]] = get_layers(target)
 
     fig: Figure
     grid: GridSpec
@@ -216,7 +229,11 @@ def plot_weights(target: Union[Layer, List[Layer], Model],
     scope: Union[None, Tuple[float, float]] = None
     if colour_scope == 'model_wide':
         minmax: List[Tuple] = list(zip(*map(lambda l: (np.min(l.get_weights()[0], axis=None),
-                                                       np.max(l.get_weights()[0], axis=None)),
+                                                       np.max(l.get_weights()[0], axis=None)
+                                                       ) if isinstance(l, Layer) else
+                                                       (np.min(l, axis=None),
+                                                        np.max(l, axis=None)
+                                                        ),
                                              layers
                                             )
                                        )
