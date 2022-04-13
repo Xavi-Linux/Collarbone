@@ -139,7 +139,7 @@ def plot_layer(layer: Union[Layer, np.ndarray], layout: Figure,
                minmax: Union[None, Tuple[float, float]]=None) -> Figure:
 
     weights: np.ndarray
-    if isinstance(Layer, layer):
+    if isinstance(layer, Layer):
         weights = layer.get_weights()[0]
 
     else:
@@ -259,5 +259,5 @@ if __name__ == '__main__':
     res = l(np.arange(75.).reshape((1, 5, 5, 3)))
     l1: Dense = Dense(3, input_shape=(5, 5), use_bias=True)
     res1 = l1(np.arange(25.).reshape((5,5)))
-    f = plot_weights(l, epochs=100, colour_scope='layer_wide')
+    f = plot_weights([l1, l, l1, l,l, l1] , epochs=100, colour_scope='layer_wide')
     f.savefig('fig')
