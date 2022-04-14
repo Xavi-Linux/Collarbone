@@ -11,6 +11,8 @@ setup(name='tftools',
       packages=find_namespace_packages(include=['tftools.*']),
       python_requires='>=3.6, <4',
       install_requires=['tensorflow>=2.7.0',
-                        'matplotlib>=3.2.2',
-                        'numpy>=1.19.5']
+                        'matplotlib>=3.4.0',
+                        'numpy>=1.19.5',
+                        'ipympl'
+                        ]
      )

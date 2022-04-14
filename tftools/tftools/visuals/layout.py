@@ -14,7 +14,7 @@ from typing import Union, List, Tuple, Dict
 
 import numpy as np
 
-__SIZE_PER_LAYER = 15
+__SIZE_PER_LAYER = 9
 
 
 def reshape_weights(weights: np.ndarray) -> np.ndarray:
