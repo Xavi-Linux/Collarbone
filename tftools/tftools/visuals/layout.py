@@ -1,3 +1,12 @@
+import matplotlib as mpl
+
+try:
+    mpl.use('nbAgg')
+
+except:
+
+    print('nbAgg not found. Defaulting to {}'.format(mpl.get_backend()))
+
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec, SubplotSpec
 from matplotlib.axes import Axes, Subplot
